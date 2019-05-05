@@ -7,7 +7,7 @@ router.get('/',(req,res,next)=>{
 });
 router.get('/VerCuenta/:name',(req,res,next)=>{
 res.send(true);
-var name=req.params.name;
+  var name=req.params.name;
   var access_token="";
   var url="https://api-tst.minka.io/oauth/token";
   var header = {'content-Type':'application/x-www-form-urlencoded'};
@@ -16,22 +16,24 @@ var name=req.params.name;
    secret:"fBEeD4a513f35A5FD30e24b6AbDB7F314dde2c16acBf2cA2"}
     request.post({url:url,form:form, header:header},function(err,resp,body){
       access_token = JSON.parse(body).access_token;
-  request.post("https://api-tst.minka.io/v1/action",{
 
-    headers:
-    {
-      'x-api-key': '6F34Edf7C3991Bd5bE31aEab9CA88dbbEC81aE6aC83CBfc8b9a5CBE8',
-      Authorization: 'Bearer '+access_token,
-      'Content-Type': 'application/json'
-    
-    }
-    }, (error, res , body)=> {
-      if(error){
-        console.error(error);
+      request.get("https://api-tst.minka.io/v1/wallet/$sebastian/balance?unit=$pcoin",{
+
+        headers:
+        {
+          'x-api-key': '6F34Edf7C3991Bd5bE31aEab9CA88dbbEC81aE6aC83CBfc8b9a5CBE8',
+          Authorization: 'Bearer '+access_token,
+          'Content-Type': 'application/json'
+        
+        }
+        }, function(error, res , body){
+
+      if(err){
+        console.error(err);
         return
       }
-      console.log(`statusCode: ${res.statusCode}`)
-       console.log(body);
+      console.log(`statusCode: ${resp.statusCode}`)
+       console.log(JSON.parse(body).amount);
     });
 });
 });
