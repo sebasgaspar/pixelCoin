@@ -5,6 +5,38 @@ const router =require('express').Router();
 router.get('/',(req,res,next)=>{
   res.send('hello world');
 });
+router.get('/CreateSigner/:name',(req,res,next)=>{
+  var access_token="";
+var url="https://api-tst.minka.io/oauth/token";
+var header = {'content-Type':'application/x-www-form-urlencoded'};
+var body = 'client_id=CLIENT_ID&secret=SECRET&grant_type=client_credentials';
+var form = {id:	"Fd3B699C8c25797fbd1b6f6C824c2dB3 ",
+ secret:"fBEeD4a513f35A5FD30e24b6AbDB7F314dde2c16acBf2cA2"}
+  request.post({url:url,form:form, header:header},function(err,resp,body){
+    access_token = JSON.parse(body).access_token;
+ request.post("https://api-tst.minka.io/v1/signer",{
+  
+json:{
+  labels:{"domain": "mydomain"  }
+  
+},
+headers:
+{
+  'x-api-key': '6F34Edf7C3991Bd5bE31aEab9CA88dbbEC81aE6aC83CBfc8b9a5CBE8',
+  Authorization: 'Bearer '+ access_token,
+  'Content-Type': 'application/json'
+
+}
+}, (error, res , body)=> {
+  if(error){
+    console.error(error);
+    return
+  }
+  console.log(`statusCode: ${res.statusCode}`)
+   console.log(body)
+});
+});
+});
 router.get('/VerCuenta/:name',(req,res,next)=>{
 res.send(true);
 var name=req.params.name;
@@ -16,7 +48,7 @@ var name=req.params.name;
    secret:"fBEeD4a513f35A5FD30e24b6AbDB7F314dde2c16acBf2cA2"}
     request.post({url:url,form:form, header:header},function(err,resp,body){
       access_token = JSON.parse(body).access_token;
-  request.post("https://api-tst.minka.io/v1/action",{
+  request.get("https://api-tst.minka.io/v1/wallet/$"+name+"/balance?unit=$pcoin",{
 
     headers:
     {
@@ -31,9 +63,11 @@ var name=req.params.name;
         return
       }
       console.log(`statusCode: ${res.statusCode}`)
-       console.log(body);
+       console.log(JSON.parse(body).amount);
+       var oo=JSON.parse(body).amount;
     });
 });
+res.send(true);
 });
 
 router.get('/CreateAction/:name',(req,res,next)=>{
