@@ -1,5 +1,10 @@
 var request = require("request");
+var n;
+var express=require('express');
+var app =express();
 
+      app.post('/getWalletById/:name',(req,res) =>{
+    n = req.param.name
 var access_token="";
 var url="https://api-tst.minka.io/oauth/token";
 var header = {'content-Type':'application/x-www-form-urlencoded'};
@@ -10,7 +15,7 @@ var form = {id:	"Fd3B699C8c25797fbd1b6f6C824c2dB3 ",
     access_token = JSON.parse(body).access_token;
 request.post("https://api-tst.minka.io/v1/wallet",{
 json:{
-    handle: "$mybank", 
+    handle: "$"+n, 
     labels: {
 	domain: "pixels",
     type: "TROUPE"
@@ -33,3 +38,5 @@ headers:
    console.log(body);
 });
 });
+ });
+module.export;
